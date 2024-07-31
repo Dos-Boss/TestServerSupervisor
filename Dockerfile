@@ -59,19 +59,18 @@ RUN mkdir -p publish/blood
 ARG CACHEBUST
 
 # Clone NBloodServerSupervisor
-RUN git clone https://github.com/CommonLoon102/NBloodServerSupervisor.git
+RUN git clone https://github.com/Dos-Boss/TestServerSupervisor.git NBloodServerSupervisor
 
 # Build NBloodServerSupervisor
 RUN dotnet publish NBloodServerSupervisor/NBloodServerSupervisor.sln --configuration Release --output publish --self-contained false --runtime linux-x64 \
     && sed -i -e "s/CHANGEME/$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;)/g" publish/appsettings.json
 
 # Clone NBlood
-RUN git clone https://github.com/CommonLoon102/NBlood.git
+RUN git clone https://github.com/Dos-Boss/NotBlood-Server NBlood
 
 # Build NBlood
 RUN cd NBlood \
-    && git checkout norender \
-    && make blood NORENDER=1
+    && make NORENDER=1
 
 # Configure nginx
 RUN printf '\
